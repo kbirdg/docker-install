@@ -270,6 +270,7 @@ download_file() {
 
   log "Downloading: ${url}"
   curl \
+    --http1.1 \
     --fail \
     --location \
     --retry 5 \

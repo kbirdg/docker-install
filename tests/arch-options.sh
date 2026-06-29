@@ -15,9 +15,14 @@ set -Eeuo pipefail
 
 url=""
 output=""
+has_http1="false"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --http1.1)
+      has_http1="true"
+      shift
+      ;;
     --output)
       output="$2"
       shift 2
@@ -35,6 +40,11 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+[[ "${has_http1}" == "true" ]] || {
+  printf 'missing --http1.1\n' >&2
+  exit 1
+}
 
 [[ -n "${output}" ]] || {
   printf 'missing output\n' >&2
