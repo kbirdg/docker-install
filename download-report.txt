@@ -1,0 +1,16 @@
+Timestamp: 2026-06-08 00:14:31 +0800
+Mode: prepare-offline
+Architecture: aarch64
+Docker version: 28.4.0
+Compose version: v2.27.0
+Mirror URL: https://download.docker.com
+
+Files:
+-rw-r--r--@ 1 kent  staff    72M Jun  8 00:13 /Users/kent/Downloads/10-安装包与压缩包/docker-install/docker-28.4.0-aarch64.tgz
+-rw-r--r--@ 1 kent  staff    58M Jun  8 00:13 /Users/kent/Downloads/10-安装包与压缩包/docker-install/docker-compose-linux-aarch64
+
+SHA256:
+21516934188f06d0e5f232cbde8112701f6d82899016240bc7a5d619f6b0059c  docker-28.4.0-x86_64.tgz
+f3ba3bf1e4ab18e96c2d36526a075a02a78fb5f8e80d3e3ca9c5bf256d81d0a0  docker-compose-linux-x86_64
+059416f4fe7465bdedbabd6d34db524e6e3bef65f3b61caa42a3d8ca94150ed2  docker-28.4.0-aarch64.tgz
+37a1c197fef5fda2a3df2d5ae0d7762ad2a00e30946ad06d4ad9fa8cef16d9e7  docker-compose-linux-aarch64
