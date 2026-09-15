@@ -77,14 +77,14 @@ run_prepare_offline_arch_case() {
     bash "${repo_root}/docker-install.sh" \
       --mode prepare-offline \
       --arch "${arch}" \
-      --docker-version 28.4.0 \
+      --docker-version 29.8.0 \
       --compose-version v2.27.0 \
       --offline-dir "${offline_dir}" \
       --mirror-url https://download.docker.com
 
-  [[ -s "${offline_dir}/docker-28.4.0-${arch}.tgz" ]]
+  [[ -s "${offline_dir}/docker-29.8.0-${arch}.tgz" ]]
   [[ -s "${offline_dir}/docker-compose-linux-${arch}" ]]
-  grep -q "/linux/static/stable/${arch}/docker-28.4.0.tgz$" "${curl_log}"
+  grep -q "/linux/static/stable/${arch}/docker-29.8.0.tgz$" "${curl_log}"
   grep -q "/v2.27.0/docker-compose-linux-${arch}$" "${curl_log}"
   grep -q "Architecture: ${arch}" "${offline_dir}/download-report.txt"
 }
@@ -93,13 +93,23 @@ combined_offline_dir="${tmp_dir}/offline-combined"
 run_prepare_offline_arch_case x86_64 "${combined_offline_dir}"
 run_prepare_offline_arch_case aarch64 "${combined_offline_dir}"
 
-grep -q 'docker-28.4.0-x86_64.tgz$' "${combined_offline_dir}/SHA256SUMS"
+grep -q 'docker-29.8.0-x86_64.tgz$' "${combined_offline_dir}/SHA256SUMS"
 grep -q 'docker-compose-linux-x86_64$' "${combined_offline_dir}/SHA256SUMS"
-grep -q 'docker-28.4.0-aarch64.tgz$' "${combined_offline_dir}/SHA256SUMS"
+grep -q 'docker-29.8.0-aarch64.tgz$' "${combined_offline_dir}/SHA256SUMS"
 grep -q 'docker-compose-linux-aarch64$' "${combined_offline_dir}/SHA256SUMS"
 (
   cd -- "${combined_offline_dir}"
   sha256sum -c SHA256SUMS >/dev/null
 )
+
+grep -Fq 'readonly DEFAULT_COMPOSE_PLUGIN_DIR="/usr/local/lib/docker/cli-plugins"' \
+  "${repo_root}/docker-install.sh"
+grep -Fq 'install -m 0755 "${compose_binary}" "${DEFAULT_COMPOSE_PLUGIN_DIR}/docker-compose"' \
+  "${repo_root}/docker-install.sh"
+if grep -Fq 'install -m 0755 "${compose_binary}" "${INSTALL_DIR}/docker-compose"' \
+  "${repo_root}/docker-install.sh"; then
+  printf 'standalone docker-compose installation is not allowed\n' >&2
+  exit 1
+fi
 
 printf 'arch-options: ok\n'
