@@ -46,7 +46,7 @@
 `install-docker.sh --mode <online|offline|prepare-offline|uninstall> [options]`
 
 通用参数：
-- `--docker-version`（默认：`28.4.0`）
+- `--docker-version`（默认：`29.8.0`）
 - `--compose-version`（默认：`v2.27.0`）
 - `--data-root`（默认：`/data/docker`）
 - `--install-dir`（默认：`/usr/local/bin`）

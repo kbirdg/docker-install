@@ -4,7 +4,7 @@
 
 当前默认版本：
 
-- Docker Engine: `28.4.0`
+- Docker Engine: `29.8.0`
 - Docker Compose: `v2.27.0`
 - 默认数据目录: `/data/docker`
 - 默认安装目录: `/usr/local/bin`
@@ -18,9 +18,9 @@
 
 ```text
 docker-install.sh
-docker-28.4.0-x86_64.tgz
+docker-29.8.0-x86_64.tgz
 docker-compose-linux-x86_64
-docker-28.4.0-aarch64.tgz
+docker-29.8.0-aarch64.tgz
 docker-compose-linux-aarch64
 SHA256SUMS
 download-report.txt
@@ -62,7 +62,7 @@ bash docker-install.sh --mode <online|offline|prepare-offline|uninstall> [option
 通用参数：
 
 ```text
---docker-version <version>   Docker version，默认 28.4.0
+--docker-version <version>   Docker version，默认 29.8.0
 --compose-version <version>  Docker Compose version，默认 v2.27.0
 --arch <auto|x86_64|aarch64>
                              目标架构，默认 auto
@@ -106,7 +106,7 @@ sudo bash docker-install.sh --mode offline --offline-dir .
 - 校验 `SHA256SUMS` 中当前架构需要的 Docker 和 Compose 包。
 - 解压 Docker 静态二进制。
 - 将 Docker 二进制安装到 `--install-dir`。
-- 将 Compose 安装为 `docker-compose`。
+- 将 Compose v2 安装为 Docker CLI 插件 `/usr/local/lib/docker/cli-plugins/docker-compose`，通过 `docker compose` 使用。
 - 写入 `/etc/docker/daemon.json`。
 - 写入 `/etc/systemd/system/docker.service`。
 - 启动或重启 Docker 服务，并检查服务状态。
@@ -197,17 +197,17 @@ sha256sum -c SHA256SUMS
 预期输出类似：
 
 ```text
-docker-28.4.0-x86_64.tgz: OK
+docker-29.8.0-x86_64.tgz: OK
 docker-compose-linux-x86_64: OK
-docker-28.4.0-aarch64.tgz: OK
+docker-29.8.0-aarch64.tgz: OK
 docker-compose-linux-aarch64: OK
 ```
 
 查看 Docker tgz 结构：
 
 ```bash
-tar -tzf docker-28.4.0-x86_64.tgz | head
-tar -tzf docker-28.4.0-aarch64.tgz | head
+tar -tzf docker-29.8.0-x86_64.tgz | head
+tar -tzf docker-29.8.0-aarch64.tgz | head
 ```
 
 ## 本地静态检查
@@ -240,7 +240,7 @@ shfmt -d -i 2 -ci docker-install.sh
 确认 `--arch` 与离线包架构一致。例如 ARM64 安装需要：
 
 ```text
-docker-28.4.0-aarch64.tgz
+docker-29.8.0-aarch64.tgz
 docker-compose-linux-aarch64
 ```
 

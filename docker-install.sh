@@ -3,11 +3,12 @@ set -Eeuo pipefail
 IFS=$'\n\t'
 
 readonly DEFAULT_MODE=""
-readonly DEFAULT_DOCKER_VERSION="28.4.0"
+readonly DEFAULT_DOCKER_VERSION="29.8.0"
 readonly DEFAULT_COMPOSE_VERSION="v2.27.0"
 readonly DEFAULT_ARCH="auto"
 readonly DEFAULT_DATA_ROOT="/opt/docker"
 readonly DEFAULT_INSTALL_DIR="/usr/local/bin"
+readonly DEFAULT_COMPOSE_PLUGIN_DIR="/usr/local/lib/docker/cli-plugins"
 readonly DEFAULT_MIRROR_URL="https://mirrors.cloud.tencent.com/docker-ce"
 readonly DEFAULT_REGISTRY_MIRROR="https://6dduu4opte8882.xuanyuan.run"
 readonly DEFAULT_COMPOSE_DOWNLOAD_PREFIX="https://gh-proxy.canwaybk.cn/https://github.com/docker/compose/releases/download"
@@ -33,7 +34,7 @@ Usage:
   docker-install.sh --mode <online|offline|prepare-offline|uninstall> [options]
 
 Common options:
-  --docker-version <version>   Docker version (default: 28.4.0)
+  --docker-version <version>   Docker version (default: 29.8.0)
   --compose-version <version>  Docker Compose version (default: v2.27.0)
   --arch <auto|x86_64|aarch64>
                                Target architecture (default: auto)
@@ -392,6 +393,7 @@ install_binaries() {
   local bin_name
 
   ensure_dir "${INSTALL_DIR}"
+  ensure_dir "${DEFAULT_COMPOSE_PLUGIN_DIR}"
   extract_docker_archive "${docker_archive}" "${extract_dir}"
 
   for bin_path in "${extract_dir}/docker"/*; do
@@ -400,9 +402,10 @@ install_binaries() {
     install -m 0755 "${bin_path}" "${INSTALL_DIR}/${bin_name}"
   done
 
-  install -m 0755 "${compose_binary}" "${INSTALL_DIR}/docker-compose"
+  install -m 0755 "${compose_binary}" "${DEFAULT_COMPOSE_PLUGIN_DIR}/docker-compose"
 
-  SUMMARY_ITEMS+=("Installed binaries to ${INSTALL_DIR}")
+  SUMMARY_ITEMS+=("Installed Docker binaries to ${INSTALL_DIR}")
+  SUMMARY_ITEMS+=("Installed Compose plugin to ${DEFAULT_COMPOSE_PLUGIN_DIR}/docker-compose")
 }
 
 write_daemon_config() {
@@ -578,6 +581,7 @@ uninstall_docker() {
   remove_file_if_exists /etc/systemd/system/docker.service
   remove_file_if_exists /etc/docker/daemon.json
   remove_dir_if_empty /etc/docker
+  remove_file_if_exists "${DEFAULT_COMPOSE_PLUGIN_DIR}/docker-compose"
 
   binaries=(
     containerd
